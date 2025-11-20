@@ -22,7 +22,7 @@ const LatestJob = () => {
             </div>
         );
     }
-
+    // 
     return (
         <section className="bg-base-200 p-8 rounded-lg">
             <h2 className="text-2xl font-bold text-center mb-6">🔥 Latest Jobs</h2>
