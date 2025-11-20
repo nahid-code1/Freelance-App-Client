@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: all;
+}
+.stage {
+  position: relative;
+}
+
+.creature {
+  cursor: grab;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+.active {
+  text-decoration: underline;
+}
