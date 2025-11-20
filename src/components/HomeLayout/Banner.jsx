@@ -68,7 +68,7 @@ const Banner = () => {
 
     return (
         <section className="flex flex-col md:flex-row justify-between items-center min-h-[80vh] px-6 md:px-16 bg-transparent">
-            {/* LEFT SIDE - TEXT */}
+            {/* LEFT SIDE - TEXT ..*/}
             <div className="md:w-1/2 text-center md:text-left space-y-6">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900">
                     Reliable Marketplace for Every Need
