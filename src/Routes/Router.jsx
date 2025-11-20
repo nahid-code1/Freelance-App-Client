@@ -10,6 +10,7 @@ import AllJobs from "../components/AllJobs/AllJobs";
 import JobDetails from "../components/JobDetails/JobDetails";
 import MyAddedJobs from "../components/MyAddedJobs/MyAddedJobs";
 import MyAcceptedTask from "../components/MyAcceptedTask/MyAcceptedTask";
+import ErrorPage from "./PrivateRoutes/ErrorPage";
 
 
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "/acceptedTask",
                 element: <PrivateRoute><MyAcceptedTask /></PrivateRoute>
+            },
+            {
+                path: "*",
+                element: <ErrorPage></ErrorPage>
             },
 
             {
