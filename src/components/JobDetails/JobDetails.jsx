@@ -38,7 +38,7 @@ const JobDetails = () => {
             })
             .catch(() => toast.error("Failed to accept job"));
     };
-    // 
+
     return (
         <div className="min-h-[80vh] flex justify-center items-center bg-base-200 p-6 my-6">
 
