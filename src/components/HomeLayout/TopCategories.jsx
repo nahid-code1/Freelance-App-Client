@@ -20,7 +20,7 @@ const TopCategories = () => {
                         <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Digital Marketing" className="w-16 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold">Digital Marketing</h3>
                     </div>
-
+                    {/*  */}
                     <div className="card bg-base-200 shadow-md p-6 hover:scale-105 transition-transform">
                         <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Content Writing" className="w-16 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold">Content Writing</h3>
