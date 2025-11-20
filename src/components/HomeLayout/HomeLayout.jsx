@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import { Outlet } from 'react-router';
 import Footer from './Footer';
 import { Toaster } from 'react-hot-toast';
-
+// 
 const HomeLayout = () => {
     return (
         <div className='max-w-11/12 mx-auto'>
