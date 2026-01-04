@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import { AuthContext } from '../../Contexts/AuthContext';
 import toast from 'react-hot-toast';
+import Button from '../UI/Button';
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext);
@@ -25,8 +26,9 @@ const Navbar = () => {
         <>
             <NavLink to={'/'}>Home</NavLink>
             <NavLink to={'/allJobs'}>All Jobs</NavLink>
-            <NavLink to={'/acceptedTask'}>My Accepted Tasks</NavLink>
-            <NavLink to={'/myJobs'}>My Added Jobs</NavLink>
+            {!user && <NavLink to={'/join'}>Join As Freelancer or Client</NavLink>}
+            {user && <NavLink to={'/acceptedTask'}>My Accepted Tasks</NavLink>}
+            {user && <NavLink to={'/myJobs'}>My Added Jobs</NavLink>}
             {user && <NavLink to={'/addJob'}>Add a Job</NavLink>}
         </>
     );
@@ -38,7 +40,8 @@ const Navbar = () => {
     };
 
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="max-w-11/12 mx-auto navbar sticky top-0 z-50 bg-base-100 shadow-sm">
+
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -52,7 +55,7 @@ const Navbar = () => {
                         {links}
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">Freelence.IO</a>
+                <a className="btn btn-ghost text-xl text-secondary">Freelance.IO</a>
             </div>
 
             <div className="navbar-center hidden lg:flex">
@@ -79,7 +82,7 @@ const Navbar = () => {
                 </label>
 
                 {user && (
-                    <div className="relative group">
+                    <div className="relative group hidden md:block">
                         <img
                             src={user.photoURL}
                             alt="User"
@@ -93,11 +96,10 @@ const Navbar = () => {
                 )}
 
                 {user ? (
-                    <button
-                        onClick={handleLogout}
-                        className='btn btn-outline border-neutral text-neutral hover:bg-neutral hover:text-white'>
+                    <Button
+                        onClick={handleLogout}>
                         LogOut
-                    </button>
+                    </Button>
                 ) : (
                     <NavLink to={"/login"} className='btn btn-outline border-neutral text-neutral hover:bg-neutral hover:text-white'>
                         Login

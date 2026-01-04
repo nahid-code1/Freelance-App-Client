@@ -1,97 +1,122 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { Draggable } from "gsap/Draggable";
-import { InertiaPlugin } from "gsap/InertiaPlugin";
-import { Physics2DPlugin } from "gsap/Physics2DPlugin";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
-gsap.registerPlugin(Draggable, InertiaPlugin, Physics2DPlugin);
+import image1 from '../../assets/GettyImages-1276389782.png';
+import image2 from '../../assets/becoming-a-freelancer---Elorus-Blog.jpg';
+import image3 from '../../assets/How-to-Find-Freelance-Work-Tips-Red-Flags-and-More.avif';
+import image4 from '../../assets/images.jfif';
+import Button from "../UI/Button";
 
 const Banner = () => {
-    const stageRef = useRef(null);
-
-    useEffect(() => {
-        const $stage = stageRef.current;
-        const stageSize = { w: $stage.clientWidth, h: $stage.clientHeight };
-
-        const resizeObserver = new ResizeObserver((entries) => {
-            const { width, height } = entries[0].contentRect;
-            stageSize.w = Math.round(width);
-            stageSize.h = Math.round(height);
-        });
-        resizeObserver.observe($stage);
-
-        // Spawn a simple bouncing circle creature
-        const circle = document.createElement("div");
-        circle.classList.add("creature");
-        $stage.appendChild(circle);
-
-        gsap.set(circle, {
-            width: 80,
-            height: 80,
-            borderRadius: "50%",
-            backgroundColor: "#f4b400",
-            position: "absolute",
-            left: "50%",
-            top: "60%",
-            xPercent: -50,
-            yPercent: -50,
-        });
-
-        const animate = () => {
-            gsap.to(circle, {
-                duration: 2,
-                y: stageSize.h / 2 - 50,
-                repeat: -1,
-                yoyo: true,
-                ease: "bounce.out",
-            });
-        };
-        animate();
-
-        Draggable.create(circle, {
-            bounds: $stage,
-            inertia: true,
-            onPress() {
-                gsap.to(circle, { scale: 0.9, duration: 0.1 });
-            },
-            onRelease() {
-                gsap.to(circle, { scale: 1, duration: 0.2, ease: "elastic.out(1, 0.4)" });
-            },
-        });
-
-        return () => {
-            resizeObserver.disconnect();
-            circle.remove();
-        };
-    }, []);
-
     return (
-        <section className="flex flex-col md:flex-row justify-between items-center min-h-[80vh] px-6 md:px-16 bg-transparent">
-            {/* LEFT SIDE - TEXT ..*/}
-            <div className="md:w-1/2 text-center md:text-left space-y-6">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900">
-                    Reliable Marketplace for Every Need
-                </h1>
-                <p className="text-gray-700 text-lg sm:text-xl">
-                    Trusted professionals, verified payments, and safe collaborations — your
-                    reliable freelance hub built for success.
-                </p>
-                <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                    <button className="btn bg-neutral text-white hover:bg-neutral-focus border-none">
-                        <NavLink to={'/allJobs'}>Browse Jobs</NavLink>
-                    </button>
-                    <button className="btn btn-outline border-neutral text-neutral hover:bg-neutral hover:text-white">
-                        <NavLink to={'/addJob'}>Create a Job</NavLink>
-                    </button>
-                </div>
-            </div>
+        <section className="mt-4 flex justify-center items-center lg:min-h-[60vh] max-h-[70vh] px-4 sm:px-8 md:px-16">
 
-            {/* RIGHT SIDE - ANIMATION */}
-            <div
-                ref={stageRef}
-                className="stage relative w-full md:w-1/2 h-[300px] md:h-[400px] mt-10 md:mt-0 overflow-hidden bg-[#FAEED8] rounded-4xl"
-            ></div>
+            <Swiper
+                modules={[Autoplay, Pagination, EffectFade]}
+                autoplay={{ delay: 4500, disableOnInteraction: false }}
+                pagination={{ clickable: true }}
+                effect="fade"
+                loop
+                className="w-full max-w-6xl"
+            >
+
+                {/* SLIDE 1 */}
+                <SwiperSlide className="relative flex justify-center items-center">
+                    <img
+                        className="w-full h-[60vh] brightness-60 max-h-[70vh] object-cover rounded-lg"
+                        src={image1}
+                        alt="Find Freelance Jobs"
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black/50 rounded-lg px-4">
+                        <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+                            Find Freelance Jobs Easily
+                        </h1>
+                        <p className="text-base sm:text-lg mb-5">
+                            Explore thousands of freelance opportunities from trusted clients.
+                        </p>
+                        <Button>
+                            <NavLink
+                                to="/allJobs">
+                                Browse All Jobs
+                            </NavLink>
+                        </Button>
+                    </div>
+                </SwiperSlide>
+
+                {/* SLIDE 2 */}
+                <SwiperSlide className="relative flex justify-center items-center">
+                    <img
+                        className="w-full h-[60vh]  brightness-60 max-h-[70vh] object-cover rounded-lg"
+                        src={image2}
+                        alt="Hire Skilled Freelancers"
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black/50 rounded-lg px-4">
+                        <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+                            Hire Skilled Freelancers
+                        </h1>
+                        <p className="text-base sm:text-lg mb-5">
+                            Connect with verified professionals ready to deliver quality work.
+                        </p>
+                        <Button>
+                            <NavLink
+                                to="/allJobs">
+                                Browse All Jobs
+                            </NavLink>
+                        </Button>
+                    </div>
+                </SwiperSlide>
+
+                {/* SLIDE 3 */}
+                <SwiperSlide className="relative flex justify-center items-center">
+                    <img
+                        className="w-full h-[60vh] brightness-60 max-h-[70vh] object-cover rounded-lg"
+                        src={image3}
+                        alt="Post Jobs & Get Proposals"
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black/50 rounded-lg px-4">
+                        <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+                            Post Jobs & Receive Proposals
+                        </h1>
+                        <p className="text-base sm:text-lg mb-5">
+                            Share your project and get bids from talented freelancers.
+                        </p>
+                        <Button>
+                            <NavLink
+                                to="/allJobs">
+                                Browse All Jobs
+                            </NavLink>
+                        </Button>
+                    </div>
+                </SwiperSlide>
+
+                {/* SLIDE 4 */}
+                <SwiperSlide className="relative flex justify-center items-center">
+                    <img
+                        className="w-full h-[60vh] brightness-60 max-h-[70vh] object-cover rounded-lg"
+                        src={image4}
+                        alt="Work Securely & Get Paid"
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black/50 rounded-lg px-4">
+                        <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+                            Work Securely & Get Paid On Time
+                        </h1>
+                        <p className="text-base sm:text-lg mb-5">
+                            Safe payments, clear milestones, and transparent workflows.
+                        </p>
+                        <Button>
+                            <NavLink
+                                to="/allJobs">
+                                Browse All Jobs
+                            </NavLink>
+                        </Button>
+                    </div>
+                </SwiperSlide>
+
+            </Swiper>
         </section>
     );
 };

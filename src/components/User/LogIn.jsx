@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../../Contexts/AuthContext';
 import toast from 'react-hot-toast';
+import Button from '../UI/Button';
 
 const LogIn = () => {
 
@@ -84,17 +85,16 @@ const LogIn = () => {
 
 
                     <div className="form-control mt-4">
-                        <button type="submit" className="btn btn-neutral">
+                        <Button type="submit">
                             Login
-                        </button>
+                        </Button>
                     </div>
 
                     <div className="divider">OR</div>
 
-                    <button
+                    <Button
                         type="button"
                         onClick={handleGoogleLogin}
-                        className="btn btn-outline w-full"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,7 @@ const LogIn = () => {
                             />
                         </svg>
                         Login with Google
-                    </button>
+                    </Button>
 
                     <p className="text-sm text-center mt-3">
                         New here?{" "}

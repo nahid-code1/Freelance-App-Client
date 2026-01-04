@@ -1,12 +1,15 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { updateProfile } from "firebase/auth";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { auth } from "../../Firebase/firebase.init";
+import Button from "../UI/Button";
 
 const SignUp = () => {
-    const { createUserByEmail, googleSignIn } = useContext(AuthContext);
-    const [error, setError] = useState("");
+    const { createUserByEmail, setUser } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [error, setError] = useState("");
 
     const handleSignup = (event) => {
         event.preventDefault();
@@ -17,7 +20,6 @@ const SignUp = () => {
         const email = form.email.value;
         const photo = form.photoUrl.value;
         const password = form.password.value;
-
 
         if (!/[A-Z]/.test(password)) {
             toast.error("Password must contain at least one uppercase letter.");
@@ -32,164 +34,104 @@ const SignUp = () => {
             return;
         }
 
-
         createUserByEmail(email, password)
-            .then(() => {
+            .then(async (result) => {
+                const firebaseUser = result.user;
+
+                await updateProfile(firebaseUser, {
+                    displayName: name,
+                    photoURL: photo,
+                });
+
+                await firebaseUser.reload();
+
+                setUser({ ...auth.currentUser });
+
+                const newUser = {
+                    name,
+                    email,
+                    photo,
+                };
+
+                await fetch("https://freelance-app-server-snowy.vercel.app/users", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify(newUser),
+                });
+
                 toast.success("Account created successfully!");
                 form.reset();
-                navigate(location.state ? location.state : '/');
+                navigate("/");
             })
             .catch(() => {
                 toast.error("Registration failed. Please try again.");
             });
     };
 
-    const handleGoogleLogin = () => {
-        googleSignIn()
-            .then(result => {
-                const user = result.user;
-                console.log("Google user:", user);
-
-                toast.success("Logged in with Google!");
-                navigate(location.state ? location.state : '/');
-
-
-                const newUser = {
-                    name: user.displayName,
-                    email: user.email,
-                    photo: user.photoURL,
-                };
-
-                fetch("http://localhost:3000/users", {
-                    method: "POST",
-                    headers: {
-                        "content-type": "application/json",
-                    },
-                    body: JSON.stringify(newUser),
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log("User saved to DB:", data);
-                    })
-                    .catch(err => console.error("Error saving user:", err));
-            })
-            .catch(error => {
-                console.error("Google login error:", error);
-                toast.error("Google login failed. Please try again.");
-            });
-    };
-
-
     return (
         <div className="min-h-[70vh] flex justify-center items-center bg-base-200">
             <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
                 <form onSubmit={handleSignup} className="card-body">
-                    <h2 className="text-2xl font-bold text-center mb-2">Register</h2>
+                    <h2 className="text-2xl font-bold text-center mb-2">
+                        Register
+                    </h2>
 
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Full Name</span>
-                        </label>
+                        <label className="label">Full Name</label>
                         <input
                             type="text"
                             name="name"
-                            placeholder="Your Name"
                             className="input input-bordered"
                             required
                         />
                     </div>
 
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Email</span>
-                        </label>
+                        <label className="label">Email</label>
                         <input
                             type="email"
                             name="email"
-                            placeholder="Email"
                             className="input input-bordered"
                             required
                         />
                     </div>
 
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Photo URL</span>
-                        </label>
+                        <label className="label">Photo URL</label>
                         <input
                             type="text"
                             name="photoUrl"
-                            placeholder="Photo URL"
                             className="input input-bordered"
                             required
                         />
                     </div>
 
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Password</span>
-                        </label>
+                        <label className="label">Password</label>
                         <input
                             type="password"
                             name="password"
-                            placeholder="Password"
                             className="input input-bordered"
                             required
                         />
                     </div>
 
                     <div className="form-control mt-4">
-                        <button type="submit" className="btn btn-neutral">
-                            Register
-                        </button>
+                        <Button type="submit">Register</Button>
                     </div>
-
-                    <div className="divider">OR</div>
-
-                    <button
-                        type="button"
-                        onClick={handleGoogleLogin}
-                        className="btn btn-outline w-full"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 48 48"
-                            width="24px"
-                            height="24px"
-                            className="mr-2"
-                        >
-                            <path
-                                fill="#FFC107"
-                                d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.84 1.154 7.961 3.039l5.657-5.657C34.046 6.322 29.268 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.65-.389-3.917z"
-                            />
-                            <path
-                                fill="#FF3D00"
-                                d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.84 1.154 7.961 3.039l5.657-5.657C34.046 6.322 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"
-                            />
-                            <path
-                                fill="#4CAF50"
-                                d="M24 44c5.166 0 9.86-1.977 13.409-5.197l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
-                            />
-                            <path
-                                fill="#1976D2"
-                                d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.565l-.003.002 6.19 5.238C39.073 35.337 42 29.999 42 24c0-1.341-.138-2.65-.389-3.917z"
-                            />
-                        </svg>
-                        Login with Google
-                    </button>
 
                     <p className="text-sm text-center mt-3">
                         Already have an account?{" "}
-                        <NavLink
-                            to="/login"
-                            className="text-blue-500 hover:underline"
-                        >
+                        <NavLink to="/login" className="text-blue-500">
                             Login
                         </NavLink>
                     </p>
                 </form>
             </div>
-            <Toaster position="top-center" reverseOrder={false} />
+
+            <Toaster position="top-center" />
         </div>
     );
 };

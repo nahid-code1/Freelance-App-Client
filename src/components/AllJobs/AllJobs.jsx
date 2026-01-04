@@ -1,54 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router';
+import React, { useEffect, useState } from "react";
+import Card from "../UI/Card";
+import Skeleton from "../UI/Skeleton";
 
 const AllJobs = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const jobsPerPage = 8;
 
     useEffect(() => {
-        fetch("http://localhost:3000/allJobs")
-            .then((res) => res.json())
-            .then((data) => {
-                setJobs(data);
+        fetch("https://freelance-app-server-snowy.vercel.app/allJobs")
+            .then(res => res.json())
+            .then(data => {
+                const sorted = data.sort(
+                    (a, b) => new Date(b.postedAt) - new Date(a.postedAt)
+                );
+                setJobs(sorted);
                 setLoading(false);
-                const newJob = [...jobs, newJob]
-                newJob.sort((a, b) => b.postedAt - a.postedAt)
-                setJobs(newJob)
             })
-            .catch((err) => console.error("Error fetching jobs:", err));
+            .catch(err => console.error(err));
     }, []);
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center py-10">
-                <span className="loading loading-spinner text-primary"></span>
-            </div>
-        );
+        return <Skeleton />;
     }
-    // 
+
+    const indexOfLastJob = currentPage * jobsPerPage;
+    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+    const totalPages = Math.ceil(jobs.length / jobsPerPage);
+
     return (
         <section className="bg-base-200 p-8 rounded-lg">
-            <h2 className="text-2xl font-bold text-center mb-6">All Jobs</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {jobs.map((job) => (
-                    <div
-                        key={job._id}
-                        className="card bg-white shadow-md p-4 border border-gray-100"
-                    >
-                        <img
-                            src={job.coverImage}
-                            alt={job.title}
-                            className="rounded-lg mb-4 h-40 w-full object-cover"
-                        />
-                        <h3 className="text-lg font-semibold">{job.title}</h3>
-                        <p className="text-sm text-gray-500 mb-2">{job.category}</p>
-                        <p className="text-gray-600 text-sm">{job.summary}</p>
-                        <p className="text-xs text-gray-400 mt-3">
-                            Posted by {job.postedBy}
-                        </p>
-                        <button><NavLink to={`/allJobs/${job._id}`} className='btn btn-outline border-neutral text-neutral hover:bg-neutral hover:text-white w-full my-4'>View details</NavLink></button>
-                    </div>
+            <h2 className="text-2xl font-bold text-center mb-6">
+                All Jobs
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {currentJobs.map(job => (
+                    <Card key={job._id} job={job} />
                 ))}
+            </div>
+
+            <div className="flex justify-center mt-10 gap-2 flex-wrap">
+                <button
+                    className="btn btn-sm"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(prev => prev - 1)}
+                >
+                    Prev
+                </button>
+
+                {[...Array(totalPages).keys()].map(num => (
+                    <button
+                        key={num}
+                        onClick={() => setCurrentPage(num + 1)}
+                        className={`btn btn-sm ${currentPage === num + 1
+                                ? "btn-neutral text-white"
+                                : "btn-outline"
+                            }`}
+                    >
+                        {num + 1}
+                    </button>
+                ))}
+
+                <button
+                    className="btn btn-sm"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(prev => prev + 1)}
+                >
+                    Next
+                </button>
             </div>
         </section>
     );

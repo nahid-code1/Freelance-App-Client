@@ -24,7 +24,7 @@ const AddJob = () => {
             postedAt: new Date().toISOString()
         };
 
-        fetch("http://localhost:3000/allJobs", {
+        fetch("https://freelance-app-server-snowy.vercel.app/allJobs", {
             method: "POST",
             headers: {
                 "content-type": "application/json",

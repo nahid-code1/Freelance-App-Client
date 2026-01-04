@@ -11,6 +11,7 @@ import JobDetails from "../components/JobDetails/JobDetails";
 import MyAddedJobs from "../components/MyAddedJobs/MyAddedJobs";
 import MyAcceptedTask from "../components/MyAcceptedTask/MyAcceptedTask";
 import ErrorPage from "./PrivateRoutes/ErrorPage";
+import JoinNow from "../components/JoinNow/JoinNow";
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <LogIn></LogIn>
+            },
+            {
+                path: "/join",
+                element: <JoinNow></JoinNow>
             },
             {
                 path: "/register",
@@ -58,7 +63,7 @@ const router = createBrowserRouter([
 
             {
                 path: "/allJobs/:id",
-                loader: ({ params }) => fetch(`http://localhost:3000/allJobs/${params.id}`),
+                loader: ({ params }) => fetch(`https://freelance-app-server-snowy.vercel.app/allJobs/${params.id}`),
                 element: (
                     <PrivateRoute>
                         <JobDetails />

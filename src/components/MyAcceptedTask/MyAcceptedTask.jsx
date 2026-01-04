@@ -8,7 +8,7 @@ const MyAcceptedTask = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:3000/acceptedJobs`)
+            fetch(`https://freelance-app-server-snowy.vercel.app/acceptedJobs`)
                 .then(res => res.json())
                 .then(data => {
                     const userTasks = data.filter(t => t.email === user.email);
@@ -18,7 +18,7 @@ const MyAcceptedTask = () => {
     }, [user?.email]);
 
     const handleRemove = (id) => {
-        fetch(`http://localhost:3000/acceptedJobs/${id}`, {
+        fetch(`https://freelance-app-server-snowy.vercel.app/acceptedJobs/${id}`, {
             method: "DELETE"
         })
             .then(res => res.json())

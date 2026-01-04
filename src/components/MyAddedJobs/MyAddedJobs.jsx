@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Contexts/AuthContext';
 import Swal from 'sweetalert2';
+import Button from '../UI/Button';
 
 const MyAddedJobs = () => {
     const [jobs, setJobs] = useState([]);
@@ -10,7 +11,7 @@ const MyAddedJobs = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:3000/allJobs?email=${user.email}`)
+            fetch(`https://freelance-app-server-snowy.vercel.app/allJobs?email=${user.email}`)
                 .then(res => res.json())
                 .then(data => {
                     setJobs(data);
@@ -29,7 +30,7 @@ const MyAddedJobs = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:3000/allJobs/${_id}`, {
+                fetch(`https://freelance-app-server-snowy.vercel.app/allJobs/${_id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())
@@ -58,7 +59,7 @@ const MyAddedJobs = () => {
             coverImage: form.coverImage.value
         }
 
-        fetch(`http://localhost:3000/allJobs/${selectedJob._id}`, {
+        fetch(`https://freelance-app-server-snowy.vercel.app/allJobs/${selectedJob._id}`, {
             method: "PUT",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(updatedJob)
@@ -122,19 +123,17 @@ const MyAddedJobs = () => {
                                 </p>
 
                                 <div className="card-actions justify-between mt-4">
-                                    <button
+                                    <Button
                                         onClick={() => setSelectedJob(job)}
-                                        className="btn btn-sm btn-neutral"
                                     >
                                         Update
-                                    </button>
+                                    </Button>
 
-                                    <button
+                                    <Button
                                         onClick={() => handleDeleteJob(job._id)}
-                                        className="btn btn-sm btn-neutral text-white"
                                     >
                                         Delete
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </div>

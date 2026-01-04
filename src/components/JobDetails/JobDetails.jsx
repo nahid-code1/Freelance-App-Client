@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useLoaderData } from "react-router";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -6,6 +6,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 
 const JobDetails = () => {
     const job = useLoaderData();
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
@@ -26,17 +27,22 @@ const JobDetails = () => {
             acceptedAt: new Date()
         };
 
-        fetch("http://localhost:3000/acceptedJobs", {
+        fetch("https://freelance-app-server-snowy.vercel.app/acceptedJobs", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(acceptedJob)
+
         })
             .then(res => res.json())
             .then(() => {
                 toast.success("Job accepted successfully!");
                 navigate("/acceptedTask");
+                setLoading(false);
             })
             .catch(() => toast.error("Failed to accept job"));
+        if (loading) {
+            return <Skeleton></Skeleton>
+        }
     };
 
     return (
